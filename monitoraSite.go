@@ -11,12 +11,13 @@ import (
 	"time"
 )
 
-const monitoramentos = 2
-const delay = 5
+const monitoramentos = 5
+const delay = 3
 
 func main() {
 
 	exibeIntroducao()
+	fmt.Println("")
 
 	for {
 		exibeMenu()
@@ -28,6 +29,8 @@ func main() {
 			iniciarMonitoramento()
 		case 2:
 			imprimeLogs()
+		case 3:
+			limpaLog()
 		case 0:
 			fmt.Println("Saindo do Programa")
 			os.Exit(0)
@@ -59,6 +62,7 @@ func leComando() int {
 func exibeMenu() {
 	fmt.Println("1- Iniciar Monitoramento")
 	fmt.Println("2- Exibir Logs")
+	fmt.Println("3- Limpar Logs")
 	fmt.Println("0- Sair do Programa")
 }
 
@@ -147,13 +151,27 @@ func registraLog(site string, status bool) {
 }
 
 func imprimeLogs() {
-	fmt.Println("Exibindo Logs...")
-
 	arquivo, err := ioutil.ReadFile("log.txt")
 
 	if err != nil {
-		fmt.Println("Ocorreu um erro:", err)
+		fmt.Println("Arquivo não encontrado, ainda não foram feitas analises.")
+	} else {
+		fmt.Println("Exibindo Logs...")
+		fmt.Println(string(arquivo))
 	}
 
-	fmt.Println(string(arquivo))
+	fmt.Println("")
+}
+
+func limpaLog() {
+	// delete file
+	err := os.Remove("log.txt")
+
+	if err != nil {
+		fmt.Println("Arquivo não encontrado, ainda não foram gerados logs.")
+	} else {
+		fmt.Println("Logs apagados.")
+	}
+
+	fmt.Println("")
 }
